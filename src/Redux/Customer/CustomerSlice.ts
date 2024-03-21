@@ -1,7 +1,8 @@
 
 import { Customer } from '../../Type/types'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import { createSlice, PayloadAction,createAsyncThunk } from '@reduxjs/toolkit';
+import {selectCustomerById} from '../Customer/CustomerSelector'
+import { RootState } from '../store';
 type CustomerStateType = {
   customers: Customer[]
 }
@@ -21,10 +22,10 @@ const customerSlice = createSlice({
     state.customers = state.customers.filter(p => p.idNumber !== action.payload)
     return state
     },
-    updateCustomer: (state: CustomerStateType, action: PayloadAction< Customer>) => {
+    updateCustomer: (state: CustomerStateType, action: PayloadAction< Omit<Customer, 'picture'>>) => {
       for (let i = 0; i < state.customers.length; i++) {
         if (state.customers[i].idNumber == action.payload.idNumber) {
-          state.customers[i] = action.payload
+          state.customers[i] = {picture:state.customers[i].picture,...action.payload}
         }
       }
       return state

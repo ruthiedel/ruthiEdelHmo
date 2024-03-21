@@ -39,16 +39,18 @@ export const getCustomerById = async (id:string)=>
       }
 }
 
-export const addCustomer = async (customer: Omit<Customer, 'id'>) => {
+export const addCustomer = async (customer: any) => {
     const response = await axios.post<Customer>('/customer', customer)
     const newbook = response.data
     return newbook
 }
 
-export const updateCustomer = async (customer:Customer) => {
+export const updateCustomer = async (customer:any) => {
     try {
-      const response = await axios.put(`/customers`, customer)
+        console.log('hjk')
+      const response = await axios.put(`/customer`, customer)
       const updateCustomer = response.data
+      console.log(updateCustomer)
       return updateCustomer
     }
     catch (error) {

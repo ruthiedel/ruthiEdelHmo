@@ -1,15 +1,15 @@
 export type Customer = {
-    idNumber:String,
+    idNumber:string,
     firstName:String,
-    lastName:String,
-    phone:String,
-    mobile:String,
+    lastName:string,
+    phone:string,
+    mobile:string,
     address:{
-        city:String,
-        street:String,
+        city:string,
+        street:string,
         houseNumber:number
     },
-    picture:String,
+    picture:string,
     birthDay:Date
 }
 

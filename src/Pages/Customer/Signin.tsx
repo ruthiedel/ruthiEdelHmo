@@ -9,7 +9,7 @@ import {Customer} from '../../Type/types'
 import {useForm} from 'react-hook-form'
 import * as yup  from "yup"
 import {yupResolver} from '@hookform/resolvers/yup'
-import {useAppDispatch, useAppSelector} from '../../Redux/store'
+import {useAppDispatch} from '../../Redux/store'
 import {selectCustomers} from '../../Redux/Customer/CustomerSelector'
 import { useSelector } from 'react-redux';
 import { addCustomer, getCustomers } from '../../Services/CustomerService';
@@ -17,16 +17,21 @@ import { addCustomer  as addCustomerRedux, setCustomers} from '../../Redux/Custo
 import { selectDetails } from '../../Redux/KoronaDetails/KOronaDetailsSelector';
 import { setDetails } from '../../Redux/KoronaDetails/KoronaDetailsSlice';
 import { getKoronaDetails } from '../../Services/KoronaDetailsService';
-const defaultPicture = './google_contacts_logo.jpg'; // Default picture filename
-const CustomerRegistrationForm = () => {
-  
-  const Details =useSelector(selectDetails)
+import ErrorDialog from '../../Component/Error';
+import { Avatar } from '@mui/material';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
- 
+const defaultPicture = './google_contacts_logo.jpg'; // Default picture filename
+
+const CustomerRegistrationForm = () => {
+  const [error,setError]= useState<{message:string}|null>(null)
+  const Details =useSelector(selectDetails)
   const Customers =useSelector(selectCustomers)
   const dispatch= useAppDispatch()
- 
-  // const [selectedPicture, setSelectedPicture] = useState((defaultPicture)); // State to store selected picture
+  const [image, setImage]=useState();
+
+  const [imageToShow, setImageToShow]=useState<string | undefined>(undefined)
+  const [selectedPicture, setSelectedPicture] = useState<any>(); // State to store selected picture
   async function getData() {
 
     if(Details.length==0){
@@ -52,9 +57,16 @@ const CustomerRegistrationForm = () => {
   }, []);
 
 
-  // const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   setSelectedPicture(file ? URL.createObjectURL(file) : defaultPicture);  }; 
+  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      console.log(file); // Log the file object to verify its structure
+      setSelectedPicture(URL.createObjectURL(file));
+    } else {
+      // Handle the case where no file is selected
+      setSelectedPicture(defaultPicture); // Set a default picture or clear the picture
+    }
+  };
 
    const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -63,15 +75,9 @@ const CustomerRegistrationForm = () => {
     city:yup.string(),
     houseNumber :yup.number().positive().integer(),
     idNumber : yup.string().min(9).max(9).required(),
-    birthDate: yup.date().required(),
+    birthDay: yup.date(),
     phone: yup.string().matches(/^\d{9}$/).nullable(), 
-    mobile: yup.string().matches(/^\d{10}$/).required(),
-    picture: yup
-    .mixed()
-    .default('./google_contacts_logo.jpg') // Set a default picture
-    .test('fileRequired', 'Please select a picture', (value) => {
-      return value !== null;
-    }),
+    mobile: yup.string().matches(/^\d{10}$/).required()
    })
  
   const {register , handleSubmit, formState:{errors}} = useForm({
@@ -79,17 +85,67 @@ const CustomerRegistrationForm = () => {
   })
   const onSubmit = async (data:any) => {
    try{
-    console.log(data)
-       
-       const customer = await addCustomer(data) 
-       console.log(customer)
-       dispatch(addCustomerRedux(customer))
+    const address = {
+      city: data.city,
+      street: data.street,
+      houseNumber: data.houseNumber
+    };
+    const { firstName, lastName, idNumber, phone, mobile } = data;
+    const customer = {
+      firstName, lastName, idNumber, phone, mobile,
+      address
+    };
+    console.log("jg")
+    const formData = new FormData()
+    for (const [key, value] of Object.entries(customer)) {
+      if (typeof value === 'object') {
+        for (const [nestedKey, nestedValue] of Object.entries(value)) {
+          formData.append(`${key}[${nestedKey}]`, nestedValue as string);
+        }
+      } else {
+        formData.append(key, value);
+
+      }
+    }
+    formData.append('picture', image!);
+   
+    formData.append('birthDay', data.birthDay.toISOString()); // Convert Date to string
+ console.log("hj")
+
+
+   
+
+    console.log(customer);
+    const newCustomer = await addCustomer(formData);
+    console.log(newCustomer);
+    alert("add patient successed")
+    dispatch(addCustomerRedux(newCustomer));
+    
    } 
-   catch
+   catch(error1:any)
    {
-      console.log("there is aproblem")
-   }
+    console.log(error1)
+       if (error1.response) {
+           // The request was made and the server responded with a status code
+           setError({message:`Request failed with status code ${error1.response.status} message ${error1.response.data}`});
+       } else if (error1.request) {
+           // The request was made but no response was received
+           setError({message:'No response received from server'});
+       } else {
+           // Something else happened in setting up the request
+           setError({message:'An error occurred while processing the request'});
+       }                     
+  }
   };
+
+  
+ const handleFileChange = (event:any) => {
+  const selectedImage = event.target.files[0];
+  setImage(selectedImage);
+  setImageToShow(URL.createObjectURL(selectedImage))
+};
+
+
   return (
     <Container maxWidth="sm"  >
      <Typography variant="h4" align="center" gutterBottom style={{ color: 'Dodger Blue', fontFamily: 'Trebuchet MS' }}>
@@ -153,7 +209,7 @@ const CustomerRegistrationForm = () => {
           <Grid item xs={12}>
           <TextField
            label="תאריך לידה"
-            {...register("birthDate")}
+            {...register("birthDay")}
             type="date"
             InputLabelProps={{
                 shrink: true,
@@ -178,16 +234,25 @@ const CustomerRegistrationForm = () => {
               {...register("mobile")}
               required
             />
+          </Grid >
+          <Grid item xs={12}>
+          {image && <Avatar alt="Uploaded" src={imageToShow} style={{ width: 150, height: 150 }} />}
           </Grid>
-          {/* <Grid item xs={12}>
-            <input type="file" accept="image/*" onChange={handlePictureChange} />
+          <Grid item xs={12}>
+                <input
+                  accept="image/*"
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}
+                />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" color="primary" component="span">
+                    Upload Image
+                  </Button>
+                </label>
           </Grid>
-          {/* Display selected picture */}
-          {/* {selectedPicture && (
-            <Grid item xs={12} >
-              <img src={selectedPicture} alt="Selected" style={{ width: '50px',height:'50px'}} />
-            </Grid>
-          )} */} 
           <Grid item xs={12}>
           <Grid container justifyContent="center">
             <Button variant="contained" color="primary" type="submit"  endIcon={<SendIcon />}>
@@ -198,7 +263,9 @@ const CustomerRegistrationForm = () => {
         </Grid>
         
       </form>
+      {error&&<ErrorDialog error={error} onClose={()=>{setError(null)}}/>}
     </Container>
+    
   );
 };
 
