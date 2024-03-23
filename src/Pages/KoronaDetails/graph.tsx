@@ -26,7 +26,6 @@ type Point={
       }
     ]
   };
- 
   return (
     <div>
        

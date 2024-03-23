@@ -7,12 +7,20 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import {  BarChart } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import axios from '../Axios/axios'
 function App() {
+
+  function handleLogout(event: any): void {
+    localStorage.removeItem('user')
+    // if(!axios.defaults.headers.common.Authorization)
+    axios.defaults.headers.common.Authorization = ``
+  }
 
     return (
       <AppBar position="static">
         <Toolbar>
-        <ViewListIcon></ViewListIcon>
+        
             <Typography
               variant="h5"
               noWrap
@@ -80,7 +88,15 @@ function App() {
             >
                 Report
              </Typography>
-        
+             <IconButton
+                        edge="end"
+                        aria-label="logout"
+                        aria-haspopup="true"
+                        color="inherit"
+                        onClick={handleLogout}
+                    >
+              <ExitToAppIcon />
+          </IconButton>
         </Toolbar>
         
       </AppBar>

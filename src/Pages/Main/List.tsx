@@ -5,7 +5,6 @@ import CustomerListItem from './CustomerListItem';
 import { Customer, KoronaDetails } from "../../Type/types"
 import { useSelector } from 'react-redux';
 import { selectCustomers } from '../../Redux/Customer/CustomerSelector'
-import { selectDetails } from '../../Redux/KoronaDetails/KOronaDetailsSelector'
 import { getCustomers, deleteCustomer, updateCustomer as UpdateCustomerApi } from '../../Services/CustomerService'
 import { useAppDispatch } from '../../Redux/store'
 import { setCustomers, deleteCustomer as deleteCustomerRedux, updateCustomer } from '../../Redux/Customer/CustomerSlice';
@@ -20,18 +19,7 @@ export default function CustomerListPage() {
 
 
   const Customers = useSelector(selectCustomers)
-  const Details = useSelector(selectDetails)
   const dispatch = useAppDispatch()
-  async function getData() {
-    if (Customers.length == 0) {
-      const customers = await getCustomers()
-      console.log(customers)
-      if (customers)
-        dispatch(setCustomers(customers))
-
-    }
-  
-  }
   const handleDelete = async (id: string) => {
     try{
     await deleteCustomer(id)
@@ -54,16 +42,6 @@ export default function CustomerListPage() {
   };
 
 
-
-  useEffect(() => {
-
-
-    if (Customers.length == 0 || Details.length == 0){
-      getData()
-      console.log(Customers)
-    }
-  }, []);
-
   const handleCustomerClick = (customer: Customer) => {
     setSelectedCustomer(customer);
   };
@@ -75,8 +53,8 @@ export default function CustomerListPage() {
   return (
     <Container>
       <Typography variant="h4" align="center" gutterBottom style={{ color: 'Dodger Blue', fontFamily: 'Trebuchet MS' }}>
-        דף ראשי
-      </Typography>
+        Menual
+       </Typography>
       {Customers.map(customer => (
         <CustomerListItem
           key={Number(customer.idNumber)}

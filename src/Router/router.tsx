@@ -4,10 +4,14 @@ import Signin from '../Pages/Customer/Signin'
 import AddKoronaDetails from "../Pages/Customer/AddDetails";
 import Layout from "../Component/Layout";
 import Report from "../Pages/KoronaDetails/Report";
+import AuthGuard from "../auth/AuthGuard";
+import GuestGuard from "../auth/GuestGuard";
+import Login from "../Pages/log-in/login";
+import SigninUser from '../Pages/sign-in/sign-in'
 export const router = createBrowserRouter([
     {
       path:'/',
-      element: <Layout/>,
+      element: <AuthGuard ><Layout/></AuthGuard>,
       children: [
         {
           path:'',
@@ -27,6 +31,15 @@ export const router = createBrowserRouter([
           element: <Report />
         }
       ]
+    },
+    
+    {
+      path: '/login',
+      element: <GuestGuard><Login/></GuestGuard>
+    },
+    {
+      path: '/signin',
+      element: <GuestGuard><SigninUser/></GuestGuard>
     },
     {
       path: '*',

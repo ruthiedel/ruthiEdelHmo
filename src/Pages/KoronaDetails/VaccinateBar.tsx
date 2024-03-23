@@ -9,17 +9,18 @@ const VaccinationProgressBar = (p:props) => {
   const [vaccinationPercentage, setVaccinationPercentage] = useState(0);
 
   useEffect(() => {
+     
     if (p.totalPatients > 0 && p.vaccinatedPatients > 0) {
       const percentage = (p.vaccinatedPatients / p.totalPatients) * 100;
       setVaccinationPercentage(percentage);
     }
-  }, []);
+  },);
 
   return (
     <>
      <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-    <h1>Vaccinated patient Vs. total Patient</h1>
+    <h1>Vaccinated patient Vs. total Patient : {parseFloat(vaccinationPercentage.toFixed(2))}%</h1>
     </div>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
     

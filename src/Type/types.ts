@@ -24,3 +24,14 @@ export type KoronaDetails={
     positiveTestDate: Date,
     recoveryDate: Date
 }
+
+export type User ={
+    email:string,
+    pin:string,
+    role:string
+
+}
+export type AuthUser={
+    user:User,
+    token:string,
+}

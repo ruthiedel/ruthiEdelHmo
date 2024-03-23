@@ -17,20 +17,17 @@ const AddKoronaDetails = () => {
         customerId: yup.string().required('Customer ID is required'),
         positiveTestDate: yup.date(),
         recoveryDate: yup.date(),
-        vaccinationDates: yup.array()
-            .of(
-                yup.object().shape({
-                    date: yup.date(),
-                    manufacturer: yup.string()
-                })
-            )
-            .max(4, 'Vaccination dates cannot exceed 4 entries')
-            .nullable()
+        vaccinationDates: yup.array().of(
+            yup.object().shape({
+                date: yup.date(),
+                manufacturer: yup.string()
+            })
+        ).max(4, 'Vaccination dates cannot exceed 4 entries').nullable()
     });
 
-    const { register, handleSubmit, reset } = useForm({
+    const { register, handleSubmit, reset, control } = useForm({
         resolver: yupResolver(schema)
-    })
+    });
 
     const catchHandle = (error1: any) => {
         if (error1.response) {

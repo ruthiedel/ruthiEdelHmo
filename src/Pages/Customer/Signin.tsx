@@ -25,48 +25,13 @@ const defaultPicture = './google_contacts_logo.jpg'; // Default picture filename
 
 const CustomerRegistrationForm = () => {
   const [error,setError]= useState<{message:string}|null>(null)
-  const Details =useSelector(selectDetails)
   const Customers =useSelector(selectCustomers)
   const dispatch= useAppDispatch()
   const [image, setImage]=useState();
 
   const [imageToShow, setImageToShow]=useState<string | undefined>(undefined)
   const [selectedPicture, setSelectedPicture] = useState<any>(); // State to store selected picture
-  async function getData() {
 
-    if(Details.length==0){
-      const details = await getKoronaDetails()
-      if(details) 
-         dispatch(setDetails(details))
-    }
-    if(Customers.length==0){
-      const customers = await getCustomers()
-      console.log(customers)
-      if(customers)
-        dispatch(setCustomers(customers))
-      
-    }
-  
-  }
-  useEffect(() => {
- 
-      
-    if(Customers.length==0)
-        getData()
-    
-  }, []);
-
-
-  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      console.log(file); // Log the file object to verify its structure
-      setSelectedPicture(URL.createObjectURL(file));
-    } else {
-      // Handle the case where no file is selected
-      setSelectedPicture(defaultPicture); // Set a default picture or clear the picture
-    }
-  };
 
    const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -83,6 +48,8 @@ const CustomerRegistrationForm = () => {
   const {register , handleSubmit, formState:{errors}} = useForm({
     resolver:yupResolver(schema)
   })
+
+  
   const onSubmit = async (data:any) => {
    try{
     const address = {
@@ -95,7 +62,6 @@ const CustomerRegistrationForm = () => {
       firstName, lastName, idNumber, phone, mobile,
       address
     };
-    console.log("jg")
     const formData = new FormData()
     for (const [key, value] of Object.entries(customer)) {
       if (typeof value === 'object') {
@@ -108,14 +74,7 @@ const CustomerRegistrationForm = () => {
       }
     }
     formData.append('picture', image!);
-   
     formData.append('birthDay', data.birthDay.toISOString()); // Convert Date to string
- console.log("hj")
-
-
-   
-
-    console.log(customer);
     const newCustomer = await addCustomer(formData);
     console.log(newCustomer);
     alert("add patient successed")
@@ -149,7 +108,7 @@ const CustomerRegistrationForm = () => {
   return (
     <Container maxWidth="sm"  >
      <Typography variant="h4" align="center" gutterBottom style={{ color: 'Dodger Blue', fontFamily: 'Trebuchet MS' }}>
-        רישום ראשוני
+      Add Patient
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>

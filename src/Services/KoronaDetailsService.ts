@@ -36,14 +36,12 @@ export const addKoronaDetails = async (details: Omit<KoronaDetails, 'id'>) => {
 }
 
 export const updateKoronaDetails = async (details:KoronaDetails) => {
-    try {
+    
       const response = await axios.put(`details`, details)
       const updateDetails = response.data
       return updateDetails
-    }
-    catch (error) {
-        console.log(error)
-      }
+    
+   
 }
 
 
