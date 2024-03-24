@@ -207,14 +207,14 @@ const CustomerRegistrationForm = () => {
                   style={{ display: 'none' }}
                 />
                 <label htmlFor="contained-button-file">
-                  <Button variant="contained" color="primary" component="span">
+                  <Button variant="contained" color="primary" component="span" >
                     Upload Image
                   </Button>
                 </label>
           </Grid>
           <Grid item xs={12}>
           <Grid container justifyContent="center">
-            <Button variant="contained" color="primary" type="submit"  endIcon={<SendIcon />}>
+            <Button variant="contained" color="primary" type="submit"   endIcon={<SendIcon />}>
               שלח
             </Button>
             </Grid>

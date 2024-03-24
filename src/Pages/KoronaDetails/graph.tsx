@@ -22,6 +22,7 @@ type Point={
     data: [
       {
         type: 'spline',
+        lineColor: 'black',
         dataPoints: p.dataPoints
       }
     ]

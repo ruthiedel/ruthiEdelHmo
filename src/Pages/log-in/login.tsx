@@ -77,7 +77,7 @@ export default function Login() {
               </Grid>
 
               <Grid item xs={12} justifyContent="center">
-                <Button variant="contained" color="primary" type="submit">
+                <Button variant="contained" color="primary" type="submit" >
                   Log In
                 </Button>
               </Grid>
@@ -88,7 +88,7 @@ export default function Login() {
       <br/>
       <br/>
       <Grid   justifyContent="center">
-      <Button variant="contained"onClick={HandleCreateClick} >
+      <Button variant="contained"onClick={HandleCreateClick}>
                   Craete an account
         </Button>
       </Grid>

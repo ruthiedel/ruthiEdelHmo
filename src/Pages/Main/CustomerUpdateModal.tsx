@@ -195,7 +195,7 @@ interface CustomerUpdateModalProps {
   
                   <Grid item xs={12}>
                     <Grid container justifyContent="center">
-                      <Button variant="contained" color="primary" type="submit" endIcon={<SendIcon />}>
+                      <Button variant="contained" color="primary" type="submit"  endIcon={<SendIcon />}>
                         שלח
                       </Button>
                     </Grid>

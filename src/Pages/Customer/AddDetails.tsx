@@ -79,8 +79,11 @@ const AddKoronaDetails = () => {
     }
     const commit = async (commitfunction: (data: any) => any, data: any) => {
         try {
-            await commitfunction(data)
+            console.log("lll")
+            let a =  await commitfunction(data)
+            console.log(a)
             reset(); // Reset the form after submission
+
         }
         catch (error1: any) {
             catchHandle(error1)
@@ -218,7 +221,7 @@ const AddKoronaDetails = () => {
 
                 <ErrorDialog error={error} onClose={() => setError(null)} />
                 <br />
-                    <Button type="submit" variant="contained" color="primary">
+                    <Button type="submit" variant="contained" color="primary" >
                         {isNew?"Submit":"Update"}
                     </Button> :      
                 

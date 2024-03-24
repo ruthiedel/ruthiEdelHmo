@@ -19,7 +19,7 @@ function App() {
 
     return (
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar >
         
             <Typography
               variant="h5"

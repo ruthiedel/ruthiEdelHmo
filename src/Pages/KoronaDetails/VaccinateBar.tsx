@@ -20,14 +20,14 @@ const VaccinationProgressBar = (p:props) => {
     <>
      <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-    <h1>Vaccinated patient Vs. total Patient : {parseFloat(vaccinationPercentage.toFixed(2))}%</h1>
+    <h1>UnVaccinated patient Vs. total Patient : {100-parseFloat(vaccinationPercentage.toFixed(2))}%</h1>
     </div>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
     
     <div style={{ width: '95%', height: '60px', backgroundColor: 'lightgray' }}>
       <div
         style={{
-          width: `${vaccinationPercentage}%`,
+          width: `${100-vaccinationPercentage}%`,
           height: '100%',
           backgroundColor: 'blue',
         }}
