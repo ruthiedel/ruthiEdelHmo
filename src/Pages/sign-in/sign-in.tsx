@@ -8,6 +8,10 @@ import { setSession } from "../../auth/auth.utils"
 import {addUser as addUserApi} from '../../Services/userServic'
 import {User} from '../../Type/types'
 import axios  from 'axios';
+import ErrorDialog from '../../Component/Error';
+
+
+
 
 export default function SignIn()
  {
@@ -17,6 +21,10 @@ export default function SignIn()
     role:'',
     confirmPassword: ''
   });
+  const [error,setError]= useState<{message:string}|null>(null)
+
+ 
+
   const dispatch = useAppDispatch()
 
   const handleChange = (e:any) => {
@@ -28,11 +36,16 @@ export default function SignIn()
     e.preventDefault();
     if(formData.confirmPassword==formData.password) 
     {
+      try{
       const value:any = await addUserApi({pin:formData.password,email:formData.email,role:formData.role})
       dispatch(setUser(value.user))
       setSession(value)
+      }
+      catch(error1:any)
+      {
+        
+      }
     }
-    console.log(formData);
   };
 
  
@@ -105,6 +118,7 @@ export default function SignIn()
           </Form>
         </Grid>
       </Grid>
+      <ErrorDialog error={error} onClose={()=>setError(null)}/>
     </Container>
   );
 }

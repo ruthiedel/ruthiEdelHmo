@@ -18,10 +18,10 @@ export default function Picture(props:NewType) {
      
         if(props.id!=''&&props.id!=null){
       try {
-        const response = getPicture(props.id);
+        const response =await getPicture(props.id);
         if (response) {
           console.log(response)
-          const blob = await response;
+          const blob =  response;
           if(blob){
              const url = URL.createObjectURL(blob);
              setPictureUrl(url);

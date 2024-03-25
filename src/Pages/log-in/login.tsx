@@ -6,6 +6,7 @@ import { useAppDispatch } from '../../Redux/store';
 import { setUser } from '../../Redux/auth2/auth.slice';
 import { setSession } from '../../auth/auth.utils';
 import { Navigate, useLocation } from "react-router-dom"
+import ErrorDialog from '../../Component/Error';
 
 
 export default function Login() {
@@ -13,6 +14,7 @@ export default function Login() {
     email: '',
     password: ''
   });
+  const [error, setError] = useState<{ message: string } | null>(null)
   const [makeAccount,setMakeAccount] = useState(false)
   const dispatch = useAppDispatch();
 
@@ -23,17 +25,20 @@ export default function Login() {
 
   const handleSubmit = async (e:any) => {
     e.preventDefault();
-    console.log("jjjj")
     try {
 
       const authUser = await login(formData.email, formData.password);
-      console.log(authUser);
 
       dispatch(setUser(authUser.user));
       setSession(authUser);
-    } catch (error) {
-      console.error('Login error:', error);
-    }
+    } catch (error1 : any) {
+      if (error1.response) {
+        setError({ message: `Request failed with status code ${error1.response.status} message ${error1.response.data}` });
+    } else if (error1.request) {
+        setError({ message: 'No response received from server' });
+    } else {
+        setError({ message: 'An error occurred while processing the request' });
+    }    }
   };
 
   const HandleCreateClick=()=>
@@ -92,6 +97,9 @@ export default function Login() {
                   Craete an account
         </Button>
       </Grid>
+      {error&&<ErrorDialog error={error} onClose={()=>{setError(null)}}/>}
+
     </Container>
+    
   );
 }

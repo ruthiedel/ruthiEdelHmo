@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Container, Grid, Typography } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,16 +7,16 @@ import { getCustomerById } from '../../Services/CustomerService'; // Import your
 import { addKoronaDetails, getKoronaDetailsByCustomerId, updateKoronaDetails } from '../../Services/KoronaDetailsService';
 import ErrorDialog from '../../Component/Error';
 
+
 const AddKoronaDetails = () => {
     const [customerId, setCustomerId] = useState<string | null>(null);
     const [customerExists, setCustomerExists] = useState<boolean>(false);
     const [error, setError] = useState<{ message: string } | null>(null)
     const [isNew, setIsNew] = useState<boolean>(true)
-
     const schema = yup.object().shape({
         customerId: yup.string().required('Customer ID is required'),
-        positiveTestDate: yup.date(),
-        recoveryDate: yup.date(),
+        positiveTestDate: yup.date().nullable(),
+        recoveryDate: yup.date().nullable(),
         vaccinationDates: yup.array().of(
             yup.object().shape({
                 date: yup.date(),
@@ -28,6 +28,9 @@ const AddKoronaDetails = () => {
     const { register, handleSubmit, reset, control } = useForm({
         resolver: yupResolver(schema)
     });
+  
+
+    
 
     const catchHandle = (error1: any) => {
         if (error1.response) {
@@ -48,38 +51,36 @@ const AddKoronaDetails = () => {
         setCustomerId(value);
         if (value) {
             try {
-                if (value.length == 9) {
+                if (value.length === 9) {
                     const customer = await getCustomerById(value);
                     if (customer) {
-                        console.log(customer)
                         setCustomerExists(true);
                         try {
-                            let details = await getKoronaDetailsByCustomerId(customer.idNumber)
+                            let details = await getKoronaDetailsByCustomerId(customer.idNumber);
                             if (details) {
-                                setIsNew(false)
+                                setIsNew(false);
+                            } else {
+                                setIsNew(true);
                             }
-                            else {
-                                setIsNew(true)
-                            }
+                        } catch (error1: any) {
+                            catchHandle(error1);
                         }
-                        catch (error1: any) {
-                            catchHandle(error1)
-                        }
-                    }
-                    else {
+                    } else {
                         setCustomerExists(false);
                     }
                 }
             } catch (error1: any) {
-                catchHandle(error1)
+                catchHandle(error1);
             }
         } else {
             setCustomerExists(false);
         }
-    }
+    };
+    
+  
+    
     const commit = async (commitfunction: (data: any) => any, data: any) => {
         try {
-            console.log("lll")
             let a =  await commitfunction(data)
             console.log(a)
             reset(); // Reset the form after submission
@@ -125,7 +126,6 @@ const AddKoronaDetails = () => {
                                     type="date"
                                     label="_____Positive Test Date"
                                     variant="outlined"
-                                    defaultValue={null}
                                     fullWidth
                                     {...register("positiveTestDate")}
 
@@ -159,7 +159,7 @@ const AddKoronaDetails = () => {
                                     {...register("vaccinationDates.0.manufacturer")}
                                     fullWidth
                                     variant="outlined"
-                                />
+                                                             />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField

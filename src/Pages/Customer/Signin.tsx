@@ -5,7 +5,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import SendIcon from '@mui/icons-material/Send';
 import Typography from '@mui/material/Typography';
-import {Customer} from '../../Type/types'
 import {useForm} from 'react-hook-form'
 import * as yup  from "yup"
 import {yupResolver} from '@hookform/resolvers/yup'
@@ -14,9 +13,6 @@ import {selectCustomers} from '../../Redux/Customer/CustomerSelector'
 import { useSelector } from 'react-redux';
 import { addCustomer, getCustomers } from '../../Services/CustomerService';
 import { addCustomer  as addCustomerRedux, setCustomers} from '../../Redux/Customer/CustomerSlice';
-import { selectDetails } from '../../Redux/KoronaDetails/KOronaDetailsSelector';
-import { setDetails } from '../../Redux/KoronaDetails/KoronaDetailsSlice';
-import { getKoronaDetails } from '../../Services/KoronaDetailsService';
 import ErrorDialog from '../../Component/Error';
 import { Avatar } from '@mui/material';
 import { Link, Navigate, useNavigate } from 'react-router-dom';

@@ -20,9 +20,8 @@ interface CustomerListItemProps {
   const CustomerListItem: React.FC<CustomerListItemProps> = ({ customer, onClick, handleDelete, handleUpdateClick }) => {
     return (
       <ListItem button>
-        
         <ListItemText primary={`${customer.firstName} ${customer.lastName}`}  onClick={onClick}  />
-        <ListItemText primary={`${customer.mobile}`}  onClick={onClick} />
+        <ListItemText primary={`${customer.idNumber}`}  onClick={onClick} />
         <ProfileImage id ={customer.idNumber}  onClick={onClick}   />
         
         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(customer.idNumber)}  >

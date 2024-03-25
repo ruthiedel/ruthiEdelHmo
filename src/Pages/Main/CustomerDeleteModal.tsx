@@ -5,8 +5,6 @@ import DialogContent from '@mui/material/DialogContent';
 import { format } from 'date-fns';
 import React from 'react';
 import { Customer, KoronaDetails } from "../../Type/types"
-import { useSelector } from 'react-redux';
-import { selectDetails } from '../../Redux/KoronaDetails/KOronaDetailsSelector'
 import { getKoronaDetailsByCustomerId } from '../../Services/KoronaDetailsService';
 import ErrorDialog from '../../Component/Error';
 interface CustomerDetailsModalProps {
@@ -51,7 +49,7 @@ interface CustomerDetailsModalProps {
             <Typography>adress: {customer.address ? `${customer.address.city} , ${customer.address.street} ${customer.address.houseNumber}` : 'un known address'}</Typography>
             <Typography>tel_phone: {customer.phone}</Typography>
             <Typography>mobile: {customer.mobile}</Typography>
-            {/* <Typography>birthDay: {format(customer.birthDay,'dd/MM/yyyy')}</Typography> */}
+            <Typography>birth day: {format(customer.birthDay, 'dd/MM/yyyy')}</Typography>
             {selectedDetails && <h3>Korona Details</h3>}
             {selectedDetails?.vaccinationDates &&<> <Typography> num of vaccinations: {selectedDetails.vaccinationDates.length}</Typography>
             {selectedDetails.vaccinationDates.map((v,index)=>(<><Typography>Vaccination number {index}</Typography>

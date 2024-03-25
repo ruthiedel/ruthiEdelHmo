@@ -46,16 +46,14 @@ export const addCustomer = async (customer: any) => {
 }
 
 export const updateCustomer = async (customer:any) => {
-    try {
+    
         console.log('hjk')
       const response = await axios.put(`/customer`, customer)
       const updateCustomer = response.data
       console.log(updateCustomer)
       return updateCustomer
-    }
-    catch (error) {
-        console.log("error updateing customer", error)
-      }
+    
+ 
 }
 
 

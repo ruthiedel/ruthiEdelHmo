@@ -1,12 +1,10 @@
 import { ThunkAction, UnknownAction, configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import customerSlice from "./Customer/CustomerSlice"
-import KoronaDetailsSlice from './KoronaDetails/KoronaDetailsSlice'
 import authSlice from './auth2/auth.slice'
 export const store = configureStore({
     reducer: {
       customer:customerSlice,
-      koronaDetails:KoronaDetailsSlice,
       auth:authSlice
     }
 })
