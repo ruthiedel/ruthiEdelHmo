@@ -25,8 +25,9 @@ export const getKoronaDetailsByCustomerId = async (id:string)=>
     }
     catch (error: any) {
         console.log(error)
-    
       }
+    
+   
 }
 
 export const addKoronaDetails = async (details: Omit<KoronaDetails, 'id'>) => {

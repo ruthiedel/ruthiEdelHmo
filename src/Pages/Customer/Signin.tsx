@@ -17,7 +17,6 @@ import ErrorDialog from '../../Component/Error';
 import { Avatar } from '@mui/material';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
-const defaultPicture = './google_contacts_logo.jpg'; // Default picture filename
 
 const CustomerRegistrationForm = () => {
   const [error,setError]= useState<{message:string}|null>(null)
@@ -81,13 +80,10 @@ const CustomerRegistrationForm = () => {
    {
     console.log(error1)
        if (error1.response) {
-           // The request was made and the server responded with a status code
            setError({message:`Request failed with status code ${error1.response.status} message ${error1.response.data}`});
        } else if (error1.request) {
-           // The request was made but no response was received
            setError({message:'No response received from server'});
        } else {
-           // Something else happened in setting up the request
            setError({message:'An error occurred while processing the request'});
        }                     
   }
@@ -110,7 +106,7 @@ const CustomerRegistrationForm = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              label="שם פרטי"
+              label="first name "
               variant="outlined"
               fullWidth
              
@@ -120,7 +116,7 @@ const CustomerRegistrationForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              label="שם משפחה"
+              label=" last name"
               variant="outlined"
               fullWidth
               {...register("lastName")}
@@ -129,7 +125,7 @@ const CustomerRegistrationForm = () => {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="תעודת זהות"
+              label="id"
               variant="outlined"
               fullWidth
               {...register("idNumber")}
@@ -138,14 +134,14 @@ const CustomerRegistrationForm = () => {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="רחוב"
+              label="street"
               variant="outlined"
               fullWidth
               {...register("street")}
             />
               <Grid item xs={12}>
             <TextField
-              label="עיר"
+              label="city"
               variant="outlined"
               fullWidth
               {...register("city")}
@@ -153,7 +149,7 @@ const CustomerRegistrationForm = () => {
          
           </Grid>
           <TextField
-              label="מספר בית"
+              label="house number"
               variant="outlined"
               fullWidth
               type="number"
@@ -163,7 +159,7 @@ const CustomerRegistrationForm = () => {
           </Grid>
           <Grid item xs={12}>
           <TextField
-           label="תאריך לידה"
+           label="birthdate"
             {...register("birthDay")}
             type="date"
             InputLabelProps={{
@@ -175,7 +171,7 @@ const CustomerRegistrationForm = () => {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="טלפון"
+              label="phone"
               variant="outlined"
               fullWidth
               {...register("phone")}
@@ -183,7 +179,7 @@ const CustomerRegistrationForm = () => {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="טלפון נייד"
+              label="mobile"
               variant="outlined"
               fullWidth
               {...register("mobile")}
@@ -211,7 +207,7 @@ const CustomerRegistrationForm = () => {
           <Grid item xs={12}>
           <Grid container justifyContent="center">
             <Button variant="contained" color="primary" type="submit"   endIcon={<SendIcon />}>
-              שלח
+              Send
             </Button>
             </Grid>
           </Grid>

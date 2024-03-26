@@ -92,15 +92,15 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
     <Dialog open={!!id} onClose={onClose}>
       {selectedCustomer && (
         <DialogContent>
-          <Container maxWidth="sm"  >
+          <Container maxWidth="sm" >
             <Typography variant="h4" align="center" gutterBottom style={{ color: 'Dodger Blue', fontFamily: 'Trebuchet MS' }}>
-              עדכון לקוח
+             Update Patient
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    label="שם פרטי"
+                    label="first name"
                     variant="outlined"
                     fullWidth
                     defaultValue={selectedCustomer.firstName}
@@ -110,7 +110,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    label="שם משפחה"
+                    label="last name"
                     variant="outlined"
                     fullWidth
                     {...register("lastName")}
@@ -120,7 +120,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    label="תעודת זהות"
+                    label="id"
                     variant="outlined"
                     fullWidth
                     {...register("idNumber")}
@@ -130,7 +130,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    label="רחוב"
+                    label="street"
                     variant="outlined"
                     fullWidth
                     defaultValue={selectedCustomer.address?.street}
@@ -138,7 +138,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                   />
                   <Grid item xs={12}>
                     <TextField
-                      label="עיר"
+                      label="city"
                       variant="outlined"
                       fullWidth
                       defaultValue={selectedCustomer.address?.city}
@@ -147,7 +147,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
 
                   </Grid>
                   <TextField
-                    label="מספר בית"
+                    label=" house number"
                     variant="outlined"
                     fullWidth
                     type="number"
@@ -158,7 +158,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    label="תאריך לידה"
+                    label="birthdate"
                     {...register("birthDay")}
                     type="date"
                     InputLabelProps={{
@@ -172,7 +172,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    label="טלפון"
+                    label="phone"
                     variant="outlined"
                     fullWidth
                     {...register("phone")}
@@ -182,7 +182,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    label="טלפון נייד"
+                    label=" mobile"
                     variant="outlined"
                     fullWidth
                     {...register("mobile")}

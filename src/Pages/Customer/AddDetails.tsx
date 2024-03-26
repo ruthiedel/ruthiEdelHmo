@@ -9,26 +9,33 @@ import ErrorDialog from '../../Component/Error';
 
 
 const AddKoronaDetails = () => {
-    const [customerId, setCustomerId] = useState<string | null>(null);
     const [customerExists, setCustomerExists] = useState<boolean>(false);
     const [error, setError] = useState<{ message: string } | null>(null)
     const [isNew, setIsNew] = useState<boolean>(true)
     const schema = yup.object().shape({
-        customerId: yup.string().required('Customer ID is required'),
-        positiveTestDate: yup.date().nullable(),
-        recoveryDate: yup.date().nullable(),
+        customerId: yup.string(),
+        positiveTestDate: yup.date().nullable().transform((value, originalValue) => {
+            if (originalValue === "") return null;
+            return value;
+        }),
+        recoveryDate:  yup.date().nullable().transform((value, originalValue) => {
+            if (originalValue === "") return null;
+            return value;
+        }),
         vaccinationDates: yup.array().of(
             yup.object().shape({
-                date: yup.date(),
-                manufacturer: yup.string()
+                date: yup.date().nullable().transform((value, originalValue) => {
+                    if (originalValue === "") return null;
+                    return value;
+                }),
+                manufacturer: yup.string().nullable()
             })
         ).max(4, 'Vaccination dates cannot exceed 4 entries').nullable()
     });
 
-    const { register, handleSubmit, reset, control } = useForm({
+    const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
-  
 
     
 
@@ -48,7 +55,6 @@ const AddKoronaDetails = () => {
 
     const handleIdChange = async (e: any) => {
         const value = e.target.value;
-        setCustomerId(value);
         if (value) {
             try {
                 if (value.length === 9) {
@@ -92,6 +98,17 @@ const AddKoronaDetails = () => {
     }
 
     const onSubmit = (data: any) => {
+        if (data.positiveTestDate === "") {
+            data.positiveTestDate = null;
+        }
+        if (data.recoveryDate === "") {
+            data.recoveryDate = null;
+        }
+        // Handle null values for vaccination dates
+        data.vaccinationDates = data.vaccinationDates.map((vaccination: any) => ({
+            date: vaccination.date === "" ? null : vaccination.date,
+            manufacturer: vaccination.manufacturer
+        }));
         if(isNew)
            commit(addKoronaDetails, data)
         else{
@@ -110,12 +127,13 @@ const AddKoronaDetails = () => {
                     <Grid item xs={12}>
                         <Grid item xs={12}>
                             <TextField
-                                label="תעודת זהות"
+                                label="id "
                                 variant="outlined"
                                 fullWidth
                                 {...register("customerId")}
                                 onChange={handleIdChange}
                                 required
+                                error={!!errors.customerId}
                             />
                         </Grid>
                     </Grid>
@@ -128,6 +146,8 @@ const AddKoronaDetails = () => {
                                     variant="outlined"
                                     fullWidth
                                     {...register("positiveTestDate")}
+                                    error={!!errors.positiveTestDate}
+                                    helperText={errors.positiveTestDate?.message}
 
                                 />
                             </Grid>

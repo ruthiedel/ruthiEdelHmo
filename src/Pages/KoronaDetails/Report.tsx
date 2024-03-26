@@ -4,7 +4,6 @@ import Graph from './graph'; // Assuming you have a Graph component
 import VaccinateBar from './VaccinateBar'
 import { useSelector } from 'react-redux';
 import { selectCustomers } from '../../Redux/Customer/CustomerSelector';
-import { endOfDay } from 'date-fns';
 interface KoronaDetails {
   positiveTestDate: string;
 }
