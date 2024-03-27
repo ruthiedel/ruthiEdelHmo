@@ -24,13 +24,10 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ customer, o
         } catch (error1: any) {
 
           if (error1.response) {
-            // The request was made and the server responded with a status code
             setError({ message: `Request failed with status code ${error1.response.status} message ${error1.response.data}` });
           } else if (error1.request) {
-            // The request was made but no response was received
             setError({ message: 'No response received from server' });
           } else {
-            // Something else happened in setting up the request
             setError({ message: 'An error occurred while processing the request' });
           }
         }
@@ -48,9 +45,9 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ customer, o
           <Typography>adress: {customer.address ? `${customer.address.city} , ${customer.address.street} ${customer.address.houseNumber}` : 'un known address'}</Typography>
           <Typography>tel_phone: {customer.phone}</Typography>
           <Typography>mobile: {customer.mobile}</Typography>
-          <Typography>birth day: {format(customer.birthDay, 'dd/MM/yyyy')}</Typography>
+          {customer.birthDay!=null&&<Typography>birth day: {format(customer.birthDay, 'dd/MM/yyyy')}</Typography>}
           {selectedDetails && <h3>Korona Details</h3>}
-          {selectedDetails?.vaccinationDates && <> <Typography> num of vaccinations: {selectedDetails.vaccinationDates.length}</Typography>
+          {selectedDetails?.vaccinationDates && <> 
             {selectedDetails.vaccinationDates.map((v, index) => (
               v && (
                 <div key={index}>

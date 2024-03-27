@@ -19,14 +19,9 @@ export default function Picture(props:NewType) {
         if(props.id!=''&&props.id!=null){
       try {
         const response =await getPicture(props.id);
-        if (response) {
-          console.log(response)
-          const blob =  response;
-          if(blob){
-             const url = URL.createObjectURL(blob);
-             setPictureUrl(url);
-          }
-         
+          if (response) {
+             const url = URL.createObjectURL(response);
+             setPictureUrl(url);         
         } else {
           console.error('Failed to fetch picture');
         }

@@ -1,4 +1,4 @@
-import React, { useRef, FormEvent, useState, useEffect } from 'react';
+import React, {  useState} from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -9,85 +9,95 @@ import {useForm} from 'react-hook-form'
 import * as yup  from "yup"
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useAppDispatch} from '../../Redux/store'
-import {selectCustomers} from '../../Redux/Customer/CustomerSelector'
-import { useSelector } from 'react-redux';
 import { addCustomer, getCustomers } from '../../Services/CustomerService';
 import { addCustomer  as addCustomerRedux, setCustomers} from '../../Redux/Customer/CustomerSlice';
 import ErrorDialog from '../../Component/Error';
 import { Avatar } from '@mui/material';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 
 const CustomerRegistrationForm = () => {
   const [error,setError]= useState<{message:string}|null>(null)
-  const Customers =useSelector(selectCustomers)
   const dispatch= useAppDispatch()
   const [image, setImage]=useState();
-
   const [imageToShow, setImageToShow]=useState<string | undefined>(undefined)
-  const [selectedPicture, setSelectedPicture] = useState<any>(); // State to store selected picture
 
-
-   const schema = yup.object().shape({
+  //yup customer schema 
+  const schema = yup.object().shape({
     firstName: yup.string().required(),
-    lastName : yup.string().required(),
-    street:yup.string(),
-    city:yup.string(),
-    houseNumber :yup.number().positive().integer(),
-    idNumber : yup.string().min(9).max(9).required(),
+    lastName: yup.string().required(),
+    street: yup.string(),
+    city: yup.string(),
+    houseNumber: yup.number().positive().integer(),
+    idNumber: yup.string().test('is-israeli-id', 'Invalid Israeli ID number', (value) => {
+      if (!value) return true; 
+      // Israeli ID number validation logic
+      const idRegExp = /^[0-9]{9}$/;
+      if (!idRegExp.test(value)) return false; // Ensure it's 9 digits
+      const idArr = value.split('').map(Number); // Convert string to array of digits
+      const sum = idArr.reduce((acc, digit, index) => {
+        const weightedDigit = index % 2 === 0 ? digit : digit * 2;
+        return acc + (weightedDigit > 9 ? weightedDigit - 9 : weightedDigit);
+      }, 0);
+      return sum % 10 === 0;
+    }).required(),
     birthDay: yup.date(),
-    phone: yup.string().matches(/^\d{9}$/).nullable(), 
+    phone: yup.string().matches(/^\d{9}$/).nullable(),
     mobile: yup.string().matches(/^\d{10}$/).required()
-   })
+  });
+  
  
   const {register , handleSubmit, formState:{errors}} = useForm({
     resolver:yupResolver(schema)
   })
 
+  const onSubmit = async (data: any) => {
+    try {
+      // Destructure data object
+      const { city, street, houseNumber, firstName, lastName, idNumber, phone, mobile, birthDay } = data;
+      
+      // Create address object
+      const address = { city, street, houseNumber };
   
-  const onSubmit = async (data:any) => {
-   try{
-    const address = {
-      city: data.city,
-      street: data.street,
-      houseNumber: data.houseNumber
-    };
-    const { firstName, lastName, idNumber, phone, mobile } = data;
-    const customer = {
-      firstName, lastName, idNumber, phone, mobile,
-      address
-    };
-    const formData = new FormData()
-    for (const [key, value] of Object.entries(customer)) {
-      if (typeof value === 'object') {
-        for (const [nestedKey, nestedValue] of Object.entries(value)) {
-          formData.append(`${key}[${nestedKey}]`, nestedValue as string);
+      // Create customer object
+      const customer = { firstName, lastName, idNumber, phone, mobile, address };
+  
+      // Create FormData object
+      const formData = new FormData();
+  
+      // Append customer data to FormData
+      for (const [key, value] of Object.entries(customer)) {
+        if (typeof value === 'object') {
+          for (const [nestedKey, nestedValue] of Object.entries(value)) {
+            formData.append(`${key}[${nestedKey}]`, nestedValue as string);
+          }
+        } else {
+          formData.append(key, value);
         }
+      }
+  
+      // Append picture and birthDay to FormData
+      formData.append('picture', image!);
+      formData.append('birthDay', birthDay.toISOString());
+  
+      // Add customer using API call
+      const newCustomer = await addCustomer(formData);
+      console.log(newCustomer);
+      alert("Patient successfully added");
+      dispatch(addCustomerRedux(newCustomer));
+    } catch (error1: any) {
+      console.error(error1);
+  
+      // Handle errors
+      if (error1.response) {
+        setError({ message: `Request failed with status code ${error1.response.status} message ${error1.response.data}` });
+      } else if (error1.request) {
+        setError({ message: 'No response received from server' });
       } else {
-        formData.append(key, value);
-
+        setError({ message: 'An error occurred while processing the request' });
       }
     }
-    formData.append('picture', image!);
-    formData.append('birthDay', data.birthDay.toISOString()); // Convert Date to string
-    const newCustomer = await addCustomer(formData);
-    console.log(newCustomer);
-    alert("add patient successed")
-    dispatch(addCustomerRedux(newCustomer));
-    
-   } 
-   catch(error1:any)
-   {
-    console.log(error1)
-       if (error1.response) {
-           setError({message:`Request failed with status code ${error1.response.status} message ${error1.response.data}`});
-       } else if (error1.request) {
-           setError({message:'No response received from server'});
-       } else {
-           setError({message:'An error occurred while processing the request'});
-       }                     
-  }
   };
+  
 
   
  const handleFileChange = (event:any) => {
@@ -109,7 +119,8 @@ const CustomerRegistrationForm = () => {
               label="first name "
               variant="outlined"
               fullWidth
-             
+              error={!!errors.firstName}
+
               required
               {...register("firstName")}
             />
@@ -120,6 +131,8 @@ const CustomerRegistrationForm = () => {
               variant="outlined"
               fullWidth
               {...register("lastName")}
+              error={!!errors.lastName}
+
               required
             />
           </Grid>
@@ -130,6 +143,10 @@ const CustomerRegistrationForm = () => {
               fullWidth
               {...register("idNumber")}
               required
+              error={!!errors.idNumber}
+              helperText={errors.idNumber?.message}
+
+
             />
           </Grid>
           <Grid item xs={12}>
@@ -154,6 +171,10 @@ const CustomerRegistrationForm = () => {
               fullWidth
               type="number"
               {...register("houseNumber")}
+              error={!!errors.houseNumber}
+              helperText={errors.houseNumber?.message}
+
+
             />
             
           </Grid>
@@ -165,6 +186,9 @@ const CustomerRegistrationForm = () => {
             InputLabelProps={{
                 shrink: true,
             }}
+            error={!!errors.birthDay}
+            helperText={errors.birthDay?.message}
+
             variant="outlined"
             InputProps={{ inputProps: { min: '1900-01-01', max: '2100-12-31' } }}
         />
@@ -175,6 +199,10 @@ const CustomerRegistrationForm = () => {
               variant="outlined"
               fullWidth
               {...register("phone")}
+              error={!!errors.phone}
+              helperText={errors.phone?.message}
+
+
             />
           </Grid>
           <Grid item xs={12}>
@@ -183,6 +211,9 @@ const CustomerRegistrationForm = () => {
               variant="outlined"
               fullWidth
               {...register("mobile")}
+              error={!!errors.mobile}
+              helperText={errors.mobile?.message}
+
               required
             />
           </Grid >

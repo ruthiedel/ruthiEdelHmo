@@ -41,13 +41,10 @@ const AddKoronaDetails = () => {
 
     const catchHandle = (error1: any) => {
         if (error1.response) {
-            // The request was made and the server responded with a status code
             setError({ message: `Request failed with status code ${error1.response.status} message ${error1.response.data}` });
         } else if (error1.request) {
-            // The request was made but no response was received
             setError({ message: 'No response received from server' });
         } else {
-            // Something else happened in setting up the request
             setError({ message: 'An error occurred while processing the request' });
         }
     }

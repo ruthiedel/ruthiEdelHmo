@@ -10,7 +10,7 @@ import { useAppDispatch } from "../Redux/store";
 export default function Layout() {
     const Customers =useSelector(selectCustomers)
     const dispatch = useAppDispatch()
-
+    //initilzing redux-store
     async function getData() {
 
         if(Customers.length==0){
@@ -36,6 +36,4 @@ export default function Layout() {
 
 }
 
-function dispatch(arg0: any) {
-    throw new Error("Function not implemented.");
-}
+

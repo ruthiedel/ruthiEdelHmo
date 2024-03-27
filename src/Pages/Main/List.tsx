@@ -9,7 +9,7 @@ import { getCustomers, deleteCustomer, updateCustomer as UpdateCustomerApi } fro
 import { useAppDispatch } from '../../Redux/store'
 import { setCustomers, deleteCustomer as deleteCustomerRedux, updateCustomer } from '../../Redux/Customer/CustomerSlice';
 import CustomerUpdateModal from './CustomerUpdateModal';
-import CustomerDetailsModal from './CustomerDeleteModal';
+import CustomerDetailsModal from './CustomerDetailModal';
 import ErrorDialog from '../../Component/Error';
 
 export default function CustomerListPage() {
@@ -46,7 +46,6 @@ export default function CustomerListPage() {
     setSelectedCustomer(customer);
   };
   const handleUpdateClick = (id: string) => {
-    console.log(id)
     setSelectedId(id);
   };
 

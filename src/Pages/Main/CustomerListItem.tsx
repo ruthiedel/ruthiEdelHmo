@@ -8,7 +8,6 @@ import { Customer, KoronaDetails } from "../../Type/types"
 
 import { Button, Grid, IconButton, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ErrorDialog from '../../Component/Error';
 
 interface CustomerListItemProps {
     customer: Customer;
@@ -19,7 +18,7 @@ interface CustomerListItemProps {
   
   const CustomerListItem: React.FC<CustomerListItemProps> = ({ customer, onClick, handleDelete, handleUpdateClick }) => {
     return (
-      <ListItem button>
+      <ListItem  button >
         <ListItemText primary={`${customer.firstName} ${customer.lastName}`}  onClick={onClick}  />
         <ListItemText primary={`${customer.idNumber}`}  onClick={onClick} />
         <ProfileImage id ={customer.idNumber}  onClick={onClick}   />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
+//an error dialog shown whenever error accour
 export default function ErrorDialog({ error, onClose }: { error: any, onClose: () => void }) {
     return (
         <>
@@ -16,7 +16,6 @@ export default function ErrorDialog({ error, onClose }: { error: any, onClose: (
                             <CloseIcon />
                         </IconButton>
                         <DialogContent>
-                            {/* Render your error content here */}
                             <p>{error.message}</p>
                         </DialogContent>
                     </>

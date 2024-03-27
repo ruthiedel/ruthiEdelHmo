@@ -10,11 +10,10 @@ import SendIcon from '@mui/icons-material/Send';
 import { Customer, KoronaDetails } from "../../Type/types"
 import { useSelector } from 'react-redux';
 import { selectCustomers } from '../../Redux/Customer/CustomerSelector'
-import { getCustomers, deleteCustomer, updateCustomer as UpdateCustomerApi } from '../../Services/CustomerService'
-import { getKoronaDetails } from '../../Services/KoronaDetailsService'
+import {  updateCustomer as UpdateCustomerApi } from '../../Services/CustomerService'
 import { useAppDispatch } from '../../Redux/store'
-import { setCustomers, deleteCustomer as deleteCustomerRedux, updateCustomer } from '../../Redux/Customer/CustomerSlice';
-import { Button, Grid, IconButton, TextField } from '@mui/material';
+import {  updateCustomer } from '../../Redux/Customer/CustomerSlice';
+import { Button, Grid, TextField } from '@mui/material';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -67,22 +66,16 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
         firstName, lastName, idNumber, birthDay, phone, mobile,
         address
       }
-
-      console.log(customer)
+      console.log(customer.idNumber)
       const updatedCustomer = await UpdateCustomerApi(customer);
-      console.log(updatedCustomer)
       dispatch(updateCustomer(customer));
       onClose()
     } catch (error: any) {
-      console.log(error)
       if (error.response) {
-        // The request was made and the server responded with a status code
         setError({ message: `Request failed with status code ${error.response.status}` });
       } else if (error.request) {
-        // The request was made but no response was received
         setError({ message: 'No response received from server' });
       } else {
-        // Something else happened in setting up the request
         setError({ message: 'An error occurred while processing the request' });
       }
     }
@@ -195,7 +188,7 @@ const CustomerUpdateModal: React.FC<CustomerUpdateModalProps> = ({ id, onClose }
                 <Grid item xs={12}>
                   <Grid container justifyContent="center">
                     <Button variant="contained" color="primary" type="submit" endIcon={<SendIcon />}>
-                      שלח
+                      Send
                     </Button>
                   </Grid>
                 </Grid>

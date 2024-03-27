@@ -1,6 +1,6 @@
 import axios from '../Axios/axios' 
 import { Customer } from '../Type/types'
-
+//get all controller frim the server
 export const getCustomers = async ()=>
 {
     try{
@@ -13,7 +13,7 @@ export const getCustomers = async ()=>
         console.log(error)
       }
 }
-
+//get picture from the server
 export const getPicture = async (id: string): Promise<Blob | null> => {
     try {
         const response = await axios.get(`/customer/picture/${id}`, {
@@ -25,7 +25,7 @@ export const getPicture = async (id: string): Promise<Blob | null> => {
         return null;
     }
 }
-
+//getById request for the server
 export const getCustomerById = async (id:string)=>
 {
     try{
@@ -38,16 +38,15 @@ export const getCustomerById = async (id:string)=>
     
       }
 }
-
+//add request for the server
 export const addCustomer = async (customer: any) => {
     const response = await axios.post<Customer>('/customer', customer)
     const newbook = response.data
     return newbook
 }
-
+//update request for the server
 export const updateCustomer = async (customer:any) => {
     
-        console.log('hjk')
       const response = await axios.put(`/customer`, customer)
       const updateCustomer = response.data
       console.log(updateCustomer)
@@ -58,7 +57,7 @@ export const updateCustomer = async (customer:any) => {
 
 
 
-
+//delete request for the server
 export const deleteCustomer = async (id: string) => {
         const response = await axios.delete(`/customer/id/${id}`)
         return response

@@ -13,12 +13,11 @@ function App() {
 
   function handleLogout(event: any): void {
     localStorage.removeItem('user')
-    // if(!axios.defaults.headers.common.Authorization)
     axios.defaults.headers.common.Authorization = ``
   }
 
     return (
-      <AppBar position="static">
+      <AppBar position="static" style={{top:0,width:'100%'}}>
         <Toolbar >
         
             <Typography

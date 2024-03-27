@@ -2,7 +2,7 @@ import axios from '../Axios/axios'
 import { KoronaDetails } from '../Type/types'
 
 
-
+//get all controller from the server
 export const getKoronaDetails= async ()=>
 {
     try{
@@ -15,7 +15,7 @@ export const getKoronaDetails= async ()=>
       }
 }
 
-
+//get details by given customerId from server
 export const getKoronaDetailsByCustomerId = async (id:string)=>
 {
     try{
@@ -29,13 +29,13 @@ export const getKoronaDetailsByCustomerId = async (id:string)=>
     
    
 }
-
+//add request for server
 export const addKoronaDetails = async (details: Omit<KoronaDetails, 'id'>) => {
     const response = await axios.post<KoronaDetails>('/details', details)
     const newdetails = response.data
     return newdetails
 }
-
+//update request for server
 export const updateKoronaDetails = async (details:KoronaDetails) => {
     
       const response = await axios.put(`details`, details)
@@ -47,7 +47,7 @@ export const updateKoronaDetails = async (details:KoronaDetails) => {
 
 
 
-
+//delete request from server
 export const deleteKoronaDetails = async (id: string) => {
         const response = await axios.delete(`/details/id/${id}`)
         return response

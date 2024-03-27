@@ -1,18 +1,18 @@
 import { AuthUser } from "../Type/types";
 import axios from "../Axios/axios";
 
+// Function to set user session in local storage and configure axios instance headers
 export const setSession = (user: AuthUser) => {
     localStorage.setItem('user', JSON.stringify(user))
-    // if(!axios.defaults.headers.common.Authorization)
-    console.log(user)
     axios.defaults.headers.common.Authorization = `${user.token}`
 }
-
+// Function to retrieve user session from local storage
 export const getSession = (): AuthUser | null => {
     const user = JSON.parse(localStorage.getItem('user') || 'null')
     return user
 }
 
+// Function to decode JWT token
 export function jwtDecode(token: string) {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

@@ -17,10 +17,12 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        // Set the authenticated user and update the authentication status
         setUser: (state: AuthStateType, action: PayloadAction<User>) => {
             state.user = action.payload;
             state.isAuthanticated = true
         },
+       // Set the initialization status
         setInitialize: (state: AuthStateType) => {
             state.isInitialized = true
         }
